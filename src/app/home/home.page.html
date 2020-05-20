@@ -6,20 +6,58 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-item>
+<ion-content [fullscreen]="true" *ngIf="!checkOutMode">
+  <ion-item *ngIf="mandatoryFields.name">
     <ion-label>Vorname:</ion-label>
     <ion-input type="text" [(ngModel)]="informations.firstName" name="firstName"></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item *ngIf="mandatoryFields.name">
     <ion-label>Nachname:</ion-label>
     <ion-input type="text" [(ngModel)]="informations.lastName" name="lastName"></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item *ngIf="mandatoryFields.eMail">
+    <ion-label>E-Mail:</ion-label>
+    <ion-input type="text" [(ngModel)]="informations.eMail" name="eMail"></ion-input>
+  </ion-item>
+  <ion-item *ngIf="mandatoryFields.cellphone">
     <ion-label>Telefonnummer:</ion-label>
     <ion-input type="tel" [(ngModel)]="informations.cellphone" name="cellphone"></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item *ngIf="mandatoryFields.adress">
+    <ion-label position="stacked">Adresse:</ion-label>
+    <ion-input type="text" [(ngModel)]="informations.street" placeholder="Straße" name="adress"></ion-input>
+    <ion-input type="text" [(ngModel)]="informations.city" placeholder="Stadt" name="city"></ion-input>
+    <ion-input type="text" maxlength="5" [(ngModel)]="informations.zip" placeholder="Postleitzahl" name="zip"></ion-input>
+  </ion-item>
+  <ion-item *ngIf="mandatoryFields.symtomConfirmation">
+    <ion-label>Haushalt Symtomfrei:</ion-label>
+    <ion-select [(ngModel)]="informations.symptoms" okText="Bestätigen" cancelText="Abbrechen">
+      <ion-select-option value=true>Ja</ion-select-option>
+      <ion-select-option value=false>Nein</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-button (click)="sendFormular()">Submit</ion-button>
+  <ion-button (click)="createRest()">Submit</ion-button>
+</ion-content>
+
+<ion-content [fullscreen]="true" *ngIf="checkOutMode">
+  <ion-button (click)="checkOut()">Checkout</ion-button>
+</ion-content>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<ion-item>
     <ion-label>Bundesland:</ion-label>
     <ion-select value="none" [(ngModel)]="informations.state" okText="Bestätigen" cancelText="Abbrechen">
       <ion-select-option value="Baden-Württemberg">Baden-Württemberg</ion-select-option>
@@ -39,12 +77,4 @@
       <ion-select-option value="Schleswig-Holstein">Schleswig-Holstein</ion-select-option>
       <ion-select-option value="Thüringen">Thüringen</ion-select-option>
     </ion-select>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Adresse:</ion-label>
-    <ion-input type="text" [(ngModel)]="informations.street" placeholder="Straße" name="adress"></ion-input>
-    <ion-input type="text" [(ngModel)]="informations.city" placeholder="Stadt" name="city"></ion-input>
-    <ion-input type="text" maxlength="5" [(ngModel)]="informations.zip" placeholder="Postleitzahl" name="zip"></ion-input>
-  </ion-item>
-  <ion-button (click)="logInput()">Submit</ion-button>
-</ion-content>
+  </ion-item>-->

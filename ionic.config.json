@@ -1,5 +1,7 @@
 {
   "name": "GastroCheck",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
