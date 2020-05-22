@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import * as firebase from 'firebase';
 import { Storage } from '@ionic/storage'
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -29,15 +30,25 @@ export class HomePage {
 
   constructor(
     private route: ActivatedRoute,
-    private storage: Storage
+    private router: Router,
+    private storage: Storage,
+    public loadingController: LoadingController
   ) {}
+
   
   ngOnInit() {
     this.currentUserId          = null
-    this.informations.gastroID  = this.route.snapshot.paramMap.get('gastroID')
-    this.informations.table     = this.route.snapshot.paramMap.get('table')
-    this.informations.secret    = this.route.snapshot.paramMap.get('secret')
-    this.informations.state     = this.route.snapshot.paramMap.get('state')
+    this.route.queryParams.subscribe((params) => {
+      if(params && params.gastroID && params.table && params.secret && params.state) {
+        this.informations.gastroID  = params.gastroID
+        this.informations.table     = params.table
+        this.informations.secret    = params.secret
+        this.informations.state     = params.state
+      } else {
+        // KEINE PARAMETER
+      }
+    })
+    
 
     // Get the value of userId
     this.storage.get("userId").then((val) => {
@@ -56,7 +67,12 @@ export class HomePage {
     })
   }
 
-  checkOut(){
+  async checkOut(){
+    const loading = await this.loadingController.create({
+      message: 'Bitte warten...'
+    });
+    await loading.present();
+
     // define Check out Guest Cloud function
     const guestCheckOut = this.functions.httpsCallable('guestCheckOut')
     guestCheckOut({ uid: this.currentUserId }).then(() => {
@@ -66,13 +82,15 @@ export class HomePage {
       this.storage.clear()
       // setup the formular based on state
       this.setFieldsBasedOnState()
+      loading.dismiss()
     }).catch((err) => {
       console.log(err)
+      loading.dismiss()
     })
   }
 
   // @argument data - firstName, lastName, email, cellphone, city, street, zip, gastroID, tableNr, deletionWeeks 
-  sendFormular(){
+  async sendFormular(){
     if(this.mandatoryFields.name && !(this.informations.firstName || this.informations.lastName)) {
       console.log("Name fehlt !")
       // Benachrichtigung
@@ -99,6 +117,12 @@ export class HomePage {
       return
     }
 
+    
+    const loading = await this.loadingController.create({
+      message: 'Bitte warten...'
+    });
+    await loading.present();
+
     this.informations.deletionWeeks = this.mandatoryFields.deletionTime
   
     firebase.auth().signInAnonymously().then(() => {
@@ -107,17 +131,33 @@ export class HomePage {
         this.storage.set("userId", firebase.auth().currentUser.uid).then(() => console.log("saved user"))
         this.currentUserId = firebase.auth().currentUser.uid
         this.checkOutMode = true
+        loading.dismiss()
         firebase.auth().currentUser.delete().catch((err) => {
           console.log(err)
+          loading.dismiss()
         })
       }).catch((err) => {
         console.log(err)
+        loading.dismiss()
       })
     }).catch((err) => {
       console.log(err)
+      loading.dismiss()
     })
   }
 
+  test(){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        gastroID: "3wKgzegbBz2b9cVkqLCD",
+        table: 2,
+        secret: "none",
+        state: "NW"
+      }
+    };
+    this.router.navigate(['home'], navigationExtras)
+  }
+  
   setFieldsBasedOnState(){
     switch (this.informations.state) {
       case "BW": // Baden-Württemberg

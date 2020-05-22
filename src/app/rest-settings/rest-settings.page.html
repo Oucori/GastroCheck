@@ -1,0 +1,60 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-button slot="start" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></ion-button>
+    <ion-title>Restaurant Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item *ngIf="isCompanyAdmin">
+    <ion-label>Restaurant Name:</ion-label>
+    <ion-input type="text" [(ngModel)]="restInfo.restName" id="restName"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Beschreibung:</ion-label>
+    <ion-input type="text" [(ngModel)]="restInfo.restDescription" id="restDescription"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Telefonnummer:</ion-label>
+    <ion-input type="text" [(ngModel)]="restInfo.restCellphone" id="restCellphone"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Tischanzahl:</ion-label>
+    <ion-input type="text" [(ngModel)]="restInfo.restTables" id="restTables"></ion-input>
+  </ion-item>
+  <ion-item *ngIf="isCompanyAdmin">
+    <ion-label>Bundesland:</ion-label>
+    <ion-select value="none" [(ngModel)]="restInfo.restState" id="restState" okText="Bestätigen" cancelText="Abbrechen">
+      <ion-select-option value="BW">Baden-Württemberg</ion-select-option>
+      <ion-select-option value="BY">Bayern</ion-select-option>
+      <ion-select-option value="BE">Berlin</ion-select-option>
+      <ion-select-option value="BB">Brandenburg</ion-select-option>
+      <ion-select-option value="HE">Bremen</ion-select-option>
+      <ion-select-option value="HH">Hamburg</ion-select-option>
+      <ion-select-option value="HE">Hessen</ion-select-option>
+      <ion-select-option value="MV">Mecklenburg-Vorpommern</ion-select-option>
+      <ion-select-option value="NI">Niedersachsen</ion-select-option>
+      <ion-select-option value="NW">Nordrhein-Westfalen</ion-select-option>
+      <ion-select-option value="RP">Rheinland-Pfalz</ion-select-option>
+      <ion-select-option value="SL">Saarland</ion-select-option>
+      <ion-select-option value="SN">Sachsen</ion-select-option>
+      <ion-select-option value="ST">Sachsen-Anhalt</ion-select-option>
+      <ion-select-option value="SH">Schleswig-Holstein</ion-select-option>
+      <ion-select-option value="TH">Thüringen</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Automatische Checkout Zeit:</ion-label>
+    <ion-select value="none" id="restClosingTime" [(ngModel)]="restInfo.restClosingTime" okText="Bestätigen" cancelText="Abbrechen">
+      <ion-select-option value="20:00">20:00</ion-select-option>
+      <ion-select-option value="22:00">22:00</ion-select-option>
+      <ion-select-option value="24:00">24:00</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item *ngIf="isCompanyAdmin && newRest">
+    <ion-label>Admin's:</ion-label>
+    <ion-input type="text" [(ngModel)]="restInfo.restAdminId" id="restAdminId"></ion-input>
+  </ion-item>
+  <ion-button (click)="updateRestaurant()">Bearbeiten.</ion-button>
+  <ion-button *ngIf="isCompanyAdmin && newRest" (click)="addRestaurant()">Neues Restaurant hinzufügen.</ion-button>
+</ion-content>

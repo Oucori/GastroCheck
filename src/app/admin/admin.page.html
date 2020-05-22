@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Administration Panel</ion-title>
-    <ion-button *ngIf="loggedIn" slot="end" (click)="openAddRestaurantForm()"><ion-icon name="add"></ion-icon></ion-button>
+    <ion-button *ngIf="loggedIn" slot="end" (click)="restSettings()"><ion-icon name="add"></ion-icon></ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -18,8 +18,11 @@
 </ion-content>
 
 <ion-content *ngIf="loggedIn">
+  <ion-refresher slot="fixed" pullFactor="0.5" pullMin="50" pullMax="100" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list>
-    <ion-item *ngFor="let rest of restaurantList">
+    <ion-item (click)="restSpecificSettings(rest.restId)" *ngFor="let rest of restaurantList">
       <ion-label>{{ rest.restName }}</ion-label>
     </ion-item>
   </ion-list>
