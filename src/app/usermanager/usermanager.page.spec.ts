@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AdminRestModalPage } from './admin-rest-modal.page';
+import { UsermanagerPage } from './usermanager.page';
 
-describe('AdminRestModalPage', () => {
-  let component: AdminRestModalPage;
-  let fixture: ComponentFixture<AdminRestModalPage>;
+describe('UsermanagerPage', () => {
+  let component: UsermanagerPage;
+  let fixture: ComponentFixture<UsermanagerPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminRestModalPage ],
+      declarations: [ UsermanagerPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AdminRestModalPage);
+    fixture = TestBed.createComponent(UsermanagerPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

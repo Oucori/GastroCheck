@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Füge einen neuen Nutzer dem Restaurant hinzu</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>E-Mail:</ion-label>
+    <ion-input type="text" [(ngModel)]="loginInformations.email" name="email"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Password:</ion-label>
+    <ion-input type="password" [(ngModel)]="loginInformations.password" name="password"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Nutzer Rolle:</ion-label>
+    <ion-select value="employee" id="restRole" [(ngModel)]="loginInformations.restRole" okText="Bestätigen" cancelText="Abbrechen">
+      <ion-select-option value="employee">Mitarbeiter</ion-select-option>
+      <ion-select-option value="admin">Administrator</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-button (click)="createAccount()">Erstelle neuen Nutzer.</ion-button>
+</ion-content>

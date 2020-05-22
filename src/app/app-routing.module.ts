@@ -20,12 +20,12 @@ const routes: Routes = [
     loadChildren: () => import('./rest-details/rest-details.module').then( m => m.RestDetailsPageModule)
   },
   {
-    path: 'admin-rest-modal',
-    loadChildren: () => import('./admin-rest-modal/admin-rest-modal.module').then( m => m.AdminRestModalPageModule)
-  },
-  {
     path: 'rest-settings',
     loadChildren: () => import('./rest-settings/rest-settings.module').then( m => m.RestSettingsPageModule)
+  },
+  {
+    path: 'usermanager',
+    loadChildren: () => import('./usermanager/usermanager.module').then( m => m.UsermanagerPageModule)
   }
 ];
 

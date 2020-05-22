@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
-import { AlertController, ModalController, NavController } from '@ionic/angular';
-import { NavigationExtras, Router } from '@angular/router';
+import { AlertController, ModalController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rest-details',
@@ -23,7 +23,6 @@ export class RestDetailsPage implements OnInit {
     if(this.loggedIn){
       this.refresh()
     }
-    
   }
 
   employeeLogin(){
@@ -113,8 +112,11 @@ export class RestDetailsPage implements OnInit {
     })
   }
 
+  restUsermanagemer(){
+    this.router.navigate(['usermanager', { gastroID: this.restInformations.restaurantID }])
+  }
+
   restSettings(){
-    console.log(this.restInformations.restaurantID)
     this.router.navigate(['rest-settings', { gastroID: this.restInformations.restaurantID }])
   }
 }

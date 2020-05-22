@@ -6,6 +6,7 @@
 
 <ion-header *ngIf="loggedIn">
   <ion-toolbar>
+    <ion-button *ngIf="restAdmin" slot="start" (click)="restUsermanagemer()"><ion-icon name="people"></ion-icon></ion-button>
     <ion-title>{{restInformations.restName}}</ion-title>
     <ion-button *ngIf="restAdmin" slot="end" (click)="restSettings()"><ion-icon name="settings"></ion-icon></ion-button>
   </ion-toolbar>
@@ -24,7 +25,6 @@
 </ion-content>
 
 <ion-content [fullscreen]="true" *ngIf="loggedIn">
-  
   <ion-list>
     <ion-refresher slot="fixed" pullFactor="0.5" pullMin="50" pullMax="100" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
@@ -61,6 +61,5 @@
         <ion-label>{{ element.firstName }} {{ element.lastName }} - {{ element.table }}</ion-label>
       </ion-item>
     </ion-item-sliding>
-    
   </ion-list>
 </ion-content>
