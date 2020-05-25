@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'usermanager',
     loadChildren: () => import('./usermanager/usermanager.module').then( m => m.UsermanagerPageModule)
+  },
+  {
+    path: 'genqr',
+    loadChildren: () => import('./genqr/genqr.module').then( m => m.GenqrPageModule)
   }
 ];
 

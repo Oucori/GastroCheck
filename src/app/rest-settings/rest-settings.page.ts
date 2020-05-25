@@ -20,7 +20,8 @@ export class RestSettingsPage implements OnInit {
   constructor(public loadingController: LoadingController,
     private route: ActivatedRoute,
     public modalController: ModalController,
-    private navCrtl: NavController) { }
+    private navCrtl: NavController,
+    private router: Router) { }
 
   functions = firebase.app().functions('europe-west3')
 
@@ -188,5 +189,13 @@ export class RestSettingsPage implements OnInit {
         loading.dismiss()
         console.log(err)
       })
+  }
+
+  restQrGen(){
+    this.router.navigate(['genqr', { gastroID: this.restInfo.restaurantID }])
+  }
+
+  restUsermanagemer(){
+    this.router.navigate(['usermanager', { gastroID: this.restInfo.restaurantID }])
   }
 }

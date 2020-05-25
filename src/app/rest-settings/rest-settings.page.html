@@ -2,6 +2,8 @@
   <ion-toolbar>
     <ion-button slot="start" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></ion-button>
     <ion-title>Restaurant Settings</ion-title>
+    <ion-button *ngIf="!newRest && isCompanyAdmin"slot="end" (click)="restQrGen()"><ion-icon name="qr-code"></ion-icon></ion-button>
+    <ion-button *ngIf="!newRest && isCompanyAdmin" slot="end" (click)="restUsermanagemer()"><ion-icon name="people"></ion-icon></ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -55,6 +57,6 @@
     <ion-label>Admin's:</ion-label>
     <ion-input type="text" [(ngModel)]="restInfo.restAdminId" id="restAdminId"></ion-input>
   </ion-item>
-  <ion-button (click)="updateRestaurant()">Bearbeiten.</ion-button>
+  <ion-button *ngIf="!newRest" (click)="updateRestaurant()">Bearbeiten.</ion-button>
   <ion-button *ngIf="isCompanyAdmin && newRest" (click)="addRestaurant()">Neues Restaurant hinzufügen.</ion-button>
 </ion-content>

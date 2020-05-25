@@ -112,6 +112,10 @@ export class RestDetailsPage implements OnInit {
     })
   }
 
+  restQrGen(){
+    this.router.navigate(['genqr', { gastroID: this.restInformations.restaurantID }])
+  }
+
   restUsermanagemer(){
     this.router.navigate(['usermanager', { gastroID: this.restInformations.restaurantID }])
   }

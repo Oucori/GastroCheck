@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,7 +13,7 @@ export class UsermanagerPage implements OnInit {
 
   functions = firebase.app().functions('europe-west3')
 
-  constructor(public loadingController: LoadingController, private route: ActivatedRoute) { }
+  constructor(public loadingController: LoadingController, private route: ActivatedRoute, private navCrtl: NavController) { }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -23,6 +23,10 @@ export class UsermanagerPage implements OnInit {
         // KEINE PARAMETER
       }
     })
+  }
+
+  goBack(){
+    this.navCrtl.pop()
   }
 
   createAccount(){

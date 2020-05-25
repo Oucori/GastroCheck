@@ -39,10 +39,9 @@ export class HomePage {
   ngOnInit() {
     this.currentUserId          = null
     this.route.queryParams.subscribe((params) => {
-      if(params && params.gastroID && params.table && params.secret && params.state) {
+      if(params && params.gastroID && params.table && params.state) {
         this.informations.gastroID  = params.gastroID
         this.informations.table     = params.table
-        this.informations.secret    = params.secret
         this.informations.state     = params.state
       } else {
         // KEINE PARAMETER
@@ -151,7 +150,6 @@ export class HomePage {
       queryParams: {
         gastroID: "3wKgzegbBz2b9cVkqLCD",
         table: 2,
-        secret: "none",
         state: "NW"
       }
     };

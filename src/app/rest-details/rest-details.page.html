@@ -7,6 +7,7 @@
 <ion-header *ngIf="loggedIn">
   <ion-toolbar>
     <ion-button *ngIf="restAdmin" slot="start" (click)="restUsermanagemer()"><ion-icon name="people"></ion-icon></ion-button>
+    <ion-button slot="start" (click)="restQrGen()"><ion-icon name="qr-code"></ion-icon></ion-button>
     <ion-title>{{restInformations.restName}}</ion-title>
     <ion-button *ngIf="restAdmin" slot="end" (click)="restSettings()"><ion-icon name="settings"></ion-icon></ion-button>
   </ion-toolbar>

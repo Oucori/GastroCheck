@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Generate new QR Code.</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-input type="text" placeholder="Table Nr." [(ngModel)]="table"></ion-input>
+  </ion-item>
+  <ion-button (click)="createCode()">Create QR Code</ion-button>
+  
+  <ion-card *ngIf="qrData"> 
+    <ngx-qrcode 
+      [elementType]="elementType"
+      [value] = "qrData">
+    </ngx-qrcode>
+  </ion-card>
+</ion-content>
