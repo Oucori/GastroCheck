@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, ToastController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -20,7 +20,7 @@ export class GenqrPage implements OnInit {
   restData: any = {}
   baseUrl: string = "https://gastrocheck.web.app/#/home"
 
-  constructor(public loadingController: LoadingController, private route: ActivatedRoute, private navCrtl: NavController) { }
+  constructor(public loadingController: LoadingController, private route: ActivatedRoute, private navCrtl: NavController, private toast: ToastController) { }
 
   ngOnInit() {
     this.restData.restaurantID = null
@@ -52,7 +52,7 @@ export class GenqrPage implements OnInit {
     if(this.restData.restaurantID && this.restData.restState && this.table){
       this.qrData = this.baseUrl + "?gastroID=" + this.restData.restaurantID  + "&table=" + this.table
     } else {
-      console.log("sachen fehlen...")
+      this.createToast("Tragen sie bitte die Tischnummer ein, wenn das nicht hilft loggen sie sich neu ein und versuchen sie es erneut.","QR Code Generierung Fehlgeschlagen.")
     }
   }
 
@@ -66,5 +66,27 @@ export class GenqrPage implements OnInit {
     downloadInstance.download = "Image.png";            //File name Here
     downloadInstance.click();                           //Downloaded file
     downloadInstance.remove();                          //Removes the Element
+
+    this.createToast("Der Download von ihrem QR Code startet nun.", "Download startet...")
+  }
+
+  async createToast(msg, header){
+    if(header == null) {
+      const toastMSG = await this.toast.create({
+        message: msg,
+        duration: 2000
+      })
+
+      toastMSG.present();
+      
+    } else {
+      const toastMSG = await this.toast.create({
+        header: header,
+        message: msg,
+        duration: 2000
+      })
+
+      toastMSG.present();
+    }
   }
 }

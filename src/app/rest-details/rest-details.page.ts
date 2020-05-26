@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,7 +17,7 @@ export class RestDetailsPage implements OnInit {
   loggedIn: boolean = false
   restAdmin: boolean = false
 
-  constructor(public alertController: AlertController, private router: Router, public modalController: ModalController) { }
+  constructor(public alertController: AlertController, private router: Router, public modalController: ModalController, private toast: ToastController) { }
 
   ngOnInit() {
     if(firebase.auth().currentUser) {
@@ -31,6 +31,7 @@ export class RestDetailsPage implements OnInit {
       firebase.auth().signInWithEmailAndPassword(this.loginInformations.email, this.loginInformations.password).then((usr) => {
         this.loggedIn = true;
         this.refresh()
+        this.createToast("Du hast dich erfolgreich eingeloggt !", "Login Erfolgreich.")
       })
     })
   }
@@ -38,6 +39,7 @@ export class RestDetailsPage implements OnInit {
   employeeLogout(){
     firebase.auth().signOut().then(() => {
       this.loggedIn = false;
+      this.createToast("Du wurdest nun ausgeloggt !", "Logout Erfolgreich.")
     })
   }
 
@@ -140,9 +142,10 @@ export class RestDetailsPage implements OnInit {
     // define Check out Guest Cloud function
     const guestCheckOut = this.functions.httpsCallable('guestCheckOut')
     guestCheckOut({ uid: id }).then(() => {
+      this.createToast("Ausgewählter benutzer wird nun ausgeloggt.", "Nutzer Checkout.")
       this.refresh()
-      console.log("done checkouting")
     }).catch((err) => {
+      this.createToast(err,"Fehler beim auschecken des Nutzers.")
       console.log(err)
     })
   }
@@ -157,5 +160,25 @@ export class RestDetailsPage implements OnInit {
 
   restSettings(){
     this.router.navigate(['rest-settings', { gastroID: this.restInformations.restaurantID }])
+  }
+
+  async createToast(msg, header){
+    if(header == null) {
+      const toastMSG = await this.toast.create({
+        message: msg,
+        duration: 2000
+      })
+
+      toastMSG.present();
+      
+    } else {
+      const toastMSG = await this.toast.create({
+        header: header,
+        message: msg,
+        duration: 2000
+      })
+
+      toastMSG.present();
+    }
   }
 }

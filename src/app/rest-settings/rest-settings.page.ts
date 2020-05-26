@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import * as firebase from 'firebase';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, ToastController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
@@ -21,7 +21,8 @@ export class RestSettingsPage implements OnInit {
     private route: ActivatedRoute,
     public modalController: ModalController,
     private navCrtl: NavController,
-    private router: Router) { }
+    private router: Router,
+    private toast: ToastController) { }
 
   functions = firebase.app().functions('europe-west3')
 
@@ -98,38 +99,27 @@ export class RestSettingsPage implements OnInit {
 
   async updateRestaurant(){
     if(!this.restInfo.restaurantID){
-      console.log("ID fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte loggen sie sich neu ein und versuchen sie es erneut.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restName && this.isCompanyAdmin){
-      console.log("Name fehlt !")
-      // Benachrichtigung
-      return
-    }
-    if(!this.restInfo.restDescription){
-      console.log("Beschreibung fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte tragen sie einen Gültigen Namen ein.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restCellphone) {
-      console.log("Telefonnummer fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte tragen sie einen Telefonnummer ein.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restTables) {
-      console.log("Tischanzahl fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte tragen sie einen Gültigen wert unter den Tischanzahl ein.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restState && this.isCompanyAdmin) {
-      console.log("Bundesland fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte wählen sie ein Bundesland aus.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restClosingTime) {
-      console.log("Schließungszeit fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte wählen sie die Schließungszeit", "Fehler beim Restaurant Update.")
       return
     }
 
@@ -141,51 +131,44 @@ export class RestSettingsPage implements OnInit {
     const updateRestaurantInformations = this.functions.httpsCallable('updateRestaurantInformations')
     updateRestaurantInformations(this.restInfo).then(() => {
         loading.dismiss()
+        this.createToast("Restaurant wird upgedated, es sollte in kürze passieren.", "Restaurant wird upgedated.")
       }).catch((err) => {
         loading.dismiss()
-        console.log(err)
+        this.createToast(err,"Fehler beim updaten des Restaurants.")
       })
   }
 
   async addRestaurant(){
     if(!this.isCompanyAdmin){
-      console.log("User ist kein Unternehmens Administrator !")
-      // Benachrichtigung
-      return
-    }
-    if(!this.restInfo.restName){
-      console.log("Name fehlt !")
-      // Benachrichtigung
+      this.createToast("Sie haben nicht die Ausreichenden berechtigungen ein Neues Restaurant hinzuzufügen.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restDescription){
-      console.log("Beschreibung fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte fügen sie eine Beschreibung hinzu.", "Fehler beim Restaurant Update.")
+      return
+    }
+    if(!this.restInfo.restaurantID){
+      this.createToast("Bitte loggen sie sich neu ein und versuchen sie es erneut.", "Fehler beim Restaurant Update.")
+      return
+    }
+    if(!this.restInfo.restName){
+      this.createToast("Bitte tragen sie einen Gültigen Namen ein.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restCellphone) {
-      console.log("Telefonnummer fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte tragen sie einen Telefonnummer ein.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restTables) {
-      console.log("Tischanzahl fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte tragen sie einen Gültigen wert unter den Tischanzahl ein.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restState) {
-      console.log("Bundesland fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte wählen sie ein Bundesland aus.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restClosingTime) {
-      console.log("Schließungszeit fehlt !")
-      // Benachrichtigung
-      return
-    }
-    if(!this.restInfo.restAdminId) {
-      console.log("Admin ID fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte wählen sie die Schließungszeit", "Fehler beim Restaurant Update.")
       return
     }
 
@@ -197,8 +180,10 @@ export class RestSettingsPage implements OnInit {
     const addNewRestaurant = this.functions.httpsCallable('addNewRestaurant')
     addNewRestaurant(this.restInfo).then(() => {
         loading.dismiss()
+        this.createToast("Neues restaurant wird hinzugefügt, es sollte in kürze erscheinen.", "Restaurant wird erstellt.")
       }).catch((err) => {
         loading.dismiss()
+        this.createToast(err,"Fehler beim erstellen des Restaurants.")
         console.log(err)
       })
   }
@@ -209,5 +194,25 @@ export class RestSettingsPage implements OnInit {
 
   restUsermanagemer(){
     this.router.navigate(['usermanager', { gastroID: this.restInfo.restaurantID }])
+  }
+
+  async createToast(msg, header){
+    if(header == null) {
+      const toastMSG = await this.toast.create({
+        message: msg,
+        duration: 2000
+      })
+
+      toastMSG.present();
+      
+    } else {
+      const toastMSG = await this.toast.create({
+        header: header,
+        message: msg,
+        duration: 2000
+      })
+
+      toastMSG.present();
+    }
   }
 }

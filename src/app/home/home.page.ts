@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as firebase from 'firebase';
 import { Storage } from '@ionic/storage'
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -34,20 +34,18 @@ export class HomePage {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private storage: Storage,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private toast: ToastController
   ) {}
 
   
   ngOnInit() {
     this.currentUserId          = null
     this.route.queryParams.subscribe((params) => {
-      //&& params.state
       if(params && params.gastroID && params.table ) {
         this.informations.gastroID  = params.gastroID
         this.informations.table     = params.table
-        //this.informations.state   = params.state
         
       } else {
         // KEINE PARAMETER
@@ -58,6 +56,7 @@ export class HomePage {
     this.storage.get("userId").then((val) => {
       // if the value was found
       if(val){
+        this.createToast("Mache da weiter wo du aufgehört hast...", "Sitzung wird fortgefahren")
         // se the current user ID to this value
         this.currentMode = 1
         this.currentUserId = val
@@ -67,6 +66,7 @@ export class HomePage {
         // no id found
         // setup the formular based on state
         this.refresh()
+        this.createToast("Herzlich Willkommen und vielen Dank das du dich einträgst... #staysafe", "Willkommen")
         // make the forumlar visible
         this.currentMode = 2
       }
@@ -89,37 +89,36 @@ export class HomePage {
       // setup the formular based on state
       this.refresh()
       loading.dismiss()
+      this.createToast("Du hast dich erfolgreich ausgecheckt.", "Check out")
     }).catch((err) => {
       console.log(err)
       loading.dismiss()
+      this.createToast(err, "Fehler beim Checkout.")
     })
   }
 
   // @argument data - firstName, lastName, email, cellphone, city, street, zip, gastroID, tableNr, deletionWeeks 
   async sendFormular(){
     if(this.mandatoryFields.name && !(this.informations.firstName || this.informations.lastName)) {
-      console.log("Name fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte tragen sie einen Gültigen Namen ein.", "Fehler beim formular absenden.")
       return
     }
     if(this.mandatoryFields.symtomConfirmation && !(this.informations.symptoms)) {
-      console.log("Symptomabfrage fehlt !")
+      this.createToast("Selektieren sie was im feld 'Haushalt Symptomfrei ?'.", "Fehler beim formular absenden.")
       // Benachrichtigung
       return
     }
     if(this.mandatoryFields.adress && !(this.informations.street || this.informations.city || this.informations.zip)) {
-      console.log("Adresse fehlt !")
+      this.createToast("Bitte tragen sie ihre Adresse ein.", "Fehler beim formular absenden.")
       // Benachrichtigung
       return
     }
     if(this.mandatoryFields.cellphone && !(this.informations.cellphone)) {
-      console.log("Telefonnummer fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte tragen sie einen Telefonnummer ein.", "Fehler beim formular absenden.")
       return
     }
     if(this.mandatoryFields.eMail && !(this.informations.eMail)) {
-      console.log("Email Adresse fehlt !")
-      // Benachrichtigung
+      this.createToast("Bitte tragen sie einen Gültigen E-Mail Adresse ein.", "Fehler beim formular absenden.")
       return
     }
 
@@ -139,19 +138,21 @@ export class HomePage {
         this.currentMode = 1
         this.refresh()
         loading.dismiss()
+        this.createToast("Vielen dank für ihr CheckIn, bitte vergessen sie nicht sich auszuchecken, diese seite können sie ruhig schließen.", "Checkin erfolgreich.")
         firebase.auth().currentUser.delete().catch((err) => {
           if(firebase.auth().currentUser){
             firebase.auth().currentUser = null
           }
           console.log(err)
-          loading.dismiss()
         })
       }).catch((err) => {
         console.log(err)
+        this.createToast(err, "Fehler Checkin.")
         loading.dismiss()
       })
     }).catch((err) => {
       console.log(err)
+      this.createToast(err, "Fehler Checkin.")
       loading.dismiss()
     })
   }
@@ -327,5 +328,25 @@ export class HomePage {
 
       this.setFieldsBasedOnState()
     }).catch((err) => { throw err })
+  }
+
+  async createToast(msg, header){
+    if(header == null) {
+      const toastMSG = await this.toast.create({
+        message: msg,
+        duration: 2000
+      })
+
+      toastMSG.present();
+      
+    } else {
+      const toastMSG = await this.toast.create({
+        header: header,
+        message: msg,
+        duration: 2000
+      })
+
+      toastMSG.present();
+    }
   }
 }
