@@ -49,11 +49,8 @@ export class GenqrPage implements OnInit {
   }
 
   createCode(){
-    console.log(this.restData.restaurantID)
-    console.log(this.restData.restState)
-    console.log(this.table)
     if(this.restData.restaurantID && this.restData.restState && this.table){
-      this.qrData = this.baseUrl + "?gastroID=" + this.restData.restaurantID  + "&table=" + this.table // + "&state=" + this.restData.restState
+      this.qrData = this.baseUrl + "?gastroID=" + this.restData.restaurantID  + "&table=" + this.table
     } else {
       console.log("sachen fehlen...")
     }

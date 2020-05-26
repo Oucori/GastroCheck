@@ -1,25 +1,29 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-button slot="start" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></ion-button>
-    <ion-title>Neuer Nutzer</ion-title>
+    <ion-title><ion-icon class="titleIcon" name="people"></ion-icon>Neuer Nutzer</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-item>
+  <ion-item class="loginItem"> 
     <ion-label>E-Mail:</ion-label>
     <ion-input type="text" [(ngModel)]="loginInformations.email" name="email"></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item class="loginItem">
     <ion-label>Password:</ion-label>
     <ion-input type="password" [(ngModel)]="loginInformations.password" name="password"></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item class="loginItem">
     <ion-label>Nutzer Rolle:</ion-label>
     <ion-select value="employee" id="restRole" [(ngModel)]="loginInformations.restRole" okText="Bestätigen" cancelText="Abbrechen">
       <ion-select-option value="employee">Mitarbeiter</ion-select-option>
       <ion-select-option value="admin">Administrator</ion-select-option>
     </ion-select>
   </ion-item>
-  <ion-button (click)="createAccount()">Erstelle neuen Nutzer.</ion-button>
+  
 </ion-content>
+
+<ion-footer>
+  <ion-button expand="full" (click)="createAccount()">Erstelle neuen Nutzer.</ion-button>
+</ion-footer>

@@ -1,20 +1,21 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-button *ngIf="loggedIn" slot="start" (click)="adminLogout()"><ion-icon name="log-out"></ion-icon></ion-button>
     <ion-title>Administration Panel</ion-title>
     <ion-button *ngIf="loggedIn" slot="end" (click)="restSettings()"><ion-icon name="add"></ion-icon></ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="!loggedIn">
-  <ion-item>
+  <ion-item class="loginItem">
     <ion-label>E-Mail:</ion-label>
     <ion-input type="text" [(ngModel)]="login.email" name="firstName"></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item class="loginItem">
     <ion-label>Password:</ion-label>
     <ion-input type="password" [(ngModel)]="login.password" name="firstName"></ion-input>
   </ion-item>
-  <ion-button (click)="adminLogin()">Login</ion-button>
+  
 </ion-content>
 
 <ion-content *ngIf="loggedIn">
@@ -27,3 +28,7 @@
     </ion-item>
   </ion-list>
 </ion-content>
+
+<ion-toolbar *ngIf="!loggedIn">
+  <ion-button expand="full" (click)="adminLogin()">Login</ion-button>
+</ion-toolbar>

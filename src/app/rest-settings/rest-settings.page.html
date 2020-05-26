@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-button slot="start" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></ion-button>
     <ion-title>Restaurant Settings</ion-title>
-    <ion-button *ngIf="!newRest && isCompanyAdmin"slot="end" (click)="restQrGen()"><ion-icon name="qr-code"></ion-icon></ion-button>
-    <ion-button *ngIf="!newRest && isCompanyAdmin" slot="end" (click)="restUsermanagemer()"><ion-icon name="people"></ion-icon></ion-button>
+    <ion-button *ngIf="!newRest"slot="end" (click)="restQrGen()"><ion-icon name="qr-code"></ion-icon></ion-button>
+    <ion-button *ngIf="!newRest" slot="end" (click)="restUsermanagemer()"><ion-icon name="people"></ion-icon></ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -53,10 +53,17 @@
       <ion-select-option value="24:00">24:00</ion-select-option>
     </ion-select>
   </ion-item>
-  <ion-item *ngIf="isCompanyAdmin && newRest">
-    <ion-label>Admin's:</ion-label>
-    <ion-input type="text" [(ngModel)]="restInfo.restAdminId" id="restAdminId"></ion-input>
+  <ion-item>
+    <ion-label>Logo Url:</ion-label>
+    <ion-input type="text" [(ngModel)]="restInfo.restLogo" id="restLogo"></ion-input>
   </ion-item>
-  <ion-button *ngIf="!newRest" (click)="updateRestaurant()">Bearbeiten.</ion-button>
-  <ion-button *ngIf="isCompanyAdmin && newRest" (click)="addRestaurant()">Neues Restaurant hinzufügen.</ion-button>
+  <ion-item>
+    <ion-label>Speisekarte Url:</ion-label>
+    <ion-input type="text" [(ngModel)]="restInfo.restPDF" id="restPDF"></ion-input>
+  </ion-item>
 </ion-content>
+
+<ion-footer>
+  <ion-button *ngIf="!newRest" expand="full" (click)="updateRestaurant()">Bearbeiten.</ion-button>
+  <ion-button *ngIf="isCompanyAdmin && newRest" expand="full" (click)="addRestaurant()">Neues Restaurant hinzufügen.</ion-button>
+</ion-footer>

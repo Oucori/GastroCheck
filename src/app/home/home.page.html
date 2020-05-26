@@ -6,35 +6,35 @@
   </ion-toolbar>
 </ion-header-->
 
-<ion-content style="--ion-background-color:#17e2b6;" class="contentBox" [fullscreen]="true" *ngIf="currentMode == 2">
+<ion-content style="--ion-background-color:#17e2b6;" class="content" class="contentBox" [fullscreen]="true" *ngIf="currentMode == 2">
   <ion-card class="formCard">
     <ion-img class="restLogo" *ngIf="this.restData.restLogo" [src]="this.restData.restLogo"></ion-img>
     <ion-label class="formHeader" id="title">
       GastroCheck
     </ion-label>
-    <ion-item *ngIf="mandatoryFields.name">
+    <ion-item class="item" *ngIf="mandatoryFields.name">
       <ion-label>Vorname:</ion-label>
-      <ion-input type="text" [(ngModel)]="informations.firstName" name="firstName"></ion-input>
+      <ion-input type="text" [(ngModel)]="informations.firstName" placeholder="Vorname" name="firstName"></ion-input>
     </ion-item>
-    <ion-item *ngIf="mandatoryFields.name">
+    <ion-item class="item" *ngIf="mandatoryFields.name">
       <ion-label>Nachname:</ion-label>
-      <ion-input type="text" [(ngModel)]="informations.lastName" name="lastName"></ion-input>
+      <ion-input type="text" [(ngModel)]="informations.lastName" placeholder="Nachname" name="lastName"></ion-input>
     </ion-item>
-    <ion-item *ngIf="mandatoryFields.eMail">
+    <ion-item class="item" *ngIf="mandatoryFields.eMail">
       <ion-label>E-Mail:</ion-label>
-      <ion-input type="text" [(ngModel)]="informations.eMail" name="eMail"></ion-input>
+      <ion-input type="text" [(ngModel)]="informations.eMail" placeholder="E-Mail" name="eMail"></ion-input>
     </ion-item>
-    <ion-item *ngIf="mandatoryFields.cellphone">
+    <ion-item class="item" *ngIf="mandatoryFields.cellphone">
       <ion-label>Telefonnummer:</ion-label>
-      <ion-input type="tel" [(ngModel)]="informations.cellphone" name="cellphone"></ion-input>
+      <ion-input type="tel" [(ngModel)]="informations.cellphone" placeholder="Telefonnummer" name="cellphone"></ion-input>
     </ion-item>
-    <ion-item *ngIf="mandatoryFields.adress">
+    <ion-item class="item" *ngIf="mandatoryFields.adress">
       <ion-label position="stacked">Adresse:</ion-label>
       <ion-input type="text" [(ngModel)]="informations.street" placeholder="Straße" name="adress"></ion-input>
       <ion-input type="text" [(ngModel)]="informations.city" placeholder="Stadt" name="city"></ion-input>
       <ion-input type="text" maxlength="5" [(ngModel)]="informations.zip" placeholder="Postleitzahl" name="zip"></ion-input>
     </ion-item>
-    <ion-item *ngIf="mandatoryFields.symtomConfirmation">
+    <ion-item class="item" *ngIf="mandatoryFields.symtomConfirmation">
       <ion-label>Haushalt Symtomfrei:</ion-label>
       <ion-select [(ngModel)]="informations.symptoms" okText="Bestätigen" cancelText="Abbrechen">
         <ion-select-option value=true>Ja</ion-select-option>
@@ -55,5 +55,4 @@
     <p  class="pdfText" *ngIf="this.restData.restPDF">Hier geht es zu unserer Karte... <a [href]="this.restData.restPDF" target="_blank">hier</a></p>
     <ion-button class="submitButton" expand="full" (click)="checkOut()">Checkout</ion-button>
   </ion-card>
-  
 </ion-content>

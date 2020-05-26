@@ -17,12 +17,18 @@ export class AdminPage implements OnInit {
   constructor(public alertController: AlertController, private router: Router) { }
 
   ngOnInit() {
+    if(firebase.auth().currentUser) {
+      this.loggedIn = true;
+      this.fetchRestaurants()
+    }
   }
 
   adminLogin(){
-    firebase.auth().signInWithEmailAndPassword(this.login.email, this.login.password).then((usr) => {
-      this.loggedIn = true;
-      this.fetchRestaurants();
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
+      firebase.auth().signInWithEmailAndPassword(this.login.email, this.login.password).then((usr) => {
+        this.loggedIn = true;
+        this.fetchRestaurants();
+      })
     })
   }
 
@@ -38,6 +44,13 @@ export class AdminPage implements OnInit {
     console.log('Begin async operation');
     this.fetchRestaurants()
     event.target.complete();
+  }
+  
+  adminLogout(){
+    firebase.auth().signOut().then(() => {
+      this.loggedIn = false;
+    })
+    // LOGOUT !!!
   }
 
   fetchRestaurants(){

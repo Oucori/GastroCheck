@@ -137,8 +137,12 @@ export class HomePage {
         this.storage.set("userId", firebase.auth().currentUser.uid).then(() => console.log("saved user"))
         this.currentUserId = firebase.auth().currentUser.uid
         this.currentMode = 1
+        this.refresh()
         loading.dismiss()
         firebase.auth().currentUser.delete().catch((err) => {
+          if(firebase.auth().currentUser){
+            firebase.auth().currentUser = null
+          }
           console.log(err)
           loading.dismiss()
         })
@@ -150,16 +154,6 @@ export class HomePage {
       console.log(err)
       loading.dismiss()
     })
-  }
-
-  test(){
-    let navigationExtras: NavigationExtras = {
-      queryParams: {
-        gastroID: "3wKgzegbBz2b9cVkqLCD",
-        table: 2
-      }
-    };
-    this.router.navigate(['home'], navigationExtras)
   }
   
   setFieldsBasedOnState(){
@@ -254,10 +248,10 @@ export class HomePage {
         break;
       case "NW": // Nordrhein-Westfalen
         this.mandatoryFields.name               = true
-        this.mandatoryFields.symtomConfirmation = false
+        this.mandatoryFields.symtomConfirmation = false//F
         this.mandatoryFields.adress             = true
         this.mandatoryFields.cellphone          = true
-        this.mandatoryFields.eMail              = false
+        this.mandatoryFields.eMail              = false//F
         this.mandatoryFields.table              = true
         this.mandatoryFields.checkIn            = true
         this.mandatoryFields.checkOut           = true

@@ -14,7 +14,7 @@ import { ModalController } from '@ionic/angular';
 export class RestSettingsPage implements OnInit {
 
   restInfo: any = {}
-  isCompanyAdmin: boolean = true
+  isCompanyAdmin: boolean = false
   newRest: boolean = false
   
   constructor(public loadingController: LoadingController,
@@ -26,19 +26,25 @@ export class RestSettingsPage implements OnInit {
   functions = firebase.app().functions('europe-west3')
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      if(params.gastroID) {
-        if(!(params.gastroID == "newRest")){
-          this.restInfo.restaurantID  = params.gastroID
-          this.newRest = false
-          // fill current rest data into the form
-          this.fetchRestInformations()
-        } else {
-          this.newRest = true
-        }
-      } else {
-        // KEINE PARAMETER
+    const sys = firebase.firestore().collection('system').doc('permissionManagement')
+    sys.get().then((data) => {
+      if(data.data().admins.includes(firebase.auth().currentUser.uid)){
+        this.isCompanyAdmin = true
       }
+      this.route.params.subscribe((params) => {
+        if(params.gastroID) {
+          if(!(params.gastroID == "newRest")){
+            this.restInfo.restaurantID  = params.gastroID
+            this.newRest = false
+            // fill current rest data into the form
+            this.fetchRestInformations()
+          } else {
+            this.newRest = true
+          }
+        } else {
+          // KEINE PARAMETER
+        }
+      })
     })
   }
 
@@ -77,6 +83,12 @@ export class RestSettingsPage implements OnInit {
       }
       if(restData.restClosingTime) {
         this.restInfo.restClosingTime = restData.restClosingTime
+      }
+      if(restData.restLogo) {
+        this.restInfo.restLogo = restData.restLogo
+      }
+      if(restData.restPDF) {
+        this.restInfo.restPDF = restData.restPDF
       }
 
       console.log(this.restInfo)

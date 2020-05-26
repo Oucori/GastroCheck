@@ -20,20 +20,29 @@ export class RestDetailsPage implements OnInit {
   constructor(public alertController: AlertController, private router: Router, public modalController: ModalController) { }
 
   ngOnInit() {
-    if(this.loggedIn){
+    if(firebase.auth().currentUser) {
       this.refresh()
+      this.loggedIn = true
     }
   }
 
   employeeLogin(){
-    firebase.auth().signInWithEmailAndPassword(this.loginInformations.email, this.loginInformations.password).then((usr) => {
-      this.loggedIn = true;
-      this.refresh()
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
+      firebase.auth().signInWithEmailAndPassword(this.loginInformations.email, this.loginInformations.password).then((usr) => {
+        this.loggedIn = true;
+        this.refresh()
+      })
+    })
+  }
+
+  employeeLogout(){
+    firebase.auth().signOut().then(() => {
+      this.loggedIn = false;
     })
   }
 
   fetchRestaurantData(){
-    const restaurant = firebase.firestore().collection('restaurants')
+    const restaurant = firebase.firestore().collection('restaurants');
     restaurant.doc(this.restInformations.restaurantID).get().then((data) => {
       const restData = data.data()
       this.restInformations.restName            = restData.restName
@@ -64,16 +73,42 @@ export class RestDetailsPage implements OnInit {
   }
 
   orderGuests(){
-    this.guestListActive = new Array
+    let guestListTempMap: Array<any> = new Array
     this.guestListInActive = new Array
     const guest = firebase.firestore().collection('guests')
     this.restInformations.restActiveGuests.forEach(element => {
       guest.doc(element).get().then((data) => {
         let guestData = data.data()
         guestData.id = element
-        this.guestListActive.push(guestData)
+        guestListTempMap.push({table: Number(guestData.table), guestData: guestData})
+
+        let highestTableNr: number = 0
+        for(let index = 0; index < guestListTempMap.length; index++) {
+          highestTableNr = Math.max(highestTableNr, guestListTempMap[index].table)
+        }
+
+        this.guestListActive = new Array
+        let userList
+        for (let index = 0; index <= highestTableNr; index++) {
+          userList = new Array
+          for(let i = 0; i < guestListTempMap.length; i++) {
+            if(guestListTempMap[i].table == index) {
+              userList.push(guestListTempMap[i].guestData)
+            }
+          }
+          if(userList.length > 0) {
+            this.guestListActive.push({table: index, userList})
+          }
+        }
+        
       })
     });
+
+    
+
+
+
+
     this.restInformations.restInActiveGuests.forEach(element => {
       guest.doc(element).get().then((data) => {
         let guestData = data.data()
