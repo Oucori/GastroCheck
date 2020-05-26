@@ -12,6 +12,7 @@ import * as firebase from 'firebase';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { IonicStorageModule } from '@ionic/storage';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -41,7 +42,8 @@ firebase.analytics();
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    //{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
 })

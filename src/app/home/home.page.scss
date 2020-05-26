@@ -25,3 +25,37 @@
 #container a {
   text-decoration: none;
 }
+
+.submitButton {
+  margin: 0px;
+  margin-top: 5vh;
+  margin-bottom: 0vh;
+  width: 100%;
+  position: absolute;
+  bottom:0px;
+}
+
+.formCard {
+  position: relative;
+  height: 90%;
+  top: 50%;
+  transform: translateY(-52%);
+}
+
+.formHeader {
+  font-size: 2em;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.restLogo {
+  height: 30vh;
+}
+
+.pdfText {
+  margin-top: 7vh;
+  margin-left: 2vh;
+  margin-right: 2vh;
+}

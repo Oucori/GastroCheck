@@ -1,5 +1,6 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-button slot="start" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></ion-button>
     <ion-title>Generate new QR Code.</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -11,9 +12,10 @@
   <ion-button (click)="createCode()">Create QR Code</ion-button>
   
   <ion-card *ngIf="qrData"> 
-    <ngx-qrcode 
+    <ngx-qrcode id="qrCode"
       [elementType]="elementType"
       [value] = "qrData">
     </ngx-qrcode>
+    <ion-button (click)="downloadQrCode()">Download</ion-button>
   </ion-card>
 </ion-content>

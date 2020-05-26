@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,14 +13,14 @@ export class GenqrPage implements OnInit {
 
   qrData: any
   table: string
-  elementType: 'url' | 'canvas' | 'img' = 'canvas';
+  elementType: 'canvas' //'url' | 'canvas' | 'img' = 'canvas';
 
   testData = "https://www.google.de/"
 
   restData: any = {}
-  baseUrl: string = "https://gastrocheck.web.app"
+  baseUrl: string = "https://gastrocheck.web.app/#/home"
 
-  constructor(public loadingController: LoadingController, private route: ActivatedRoute) { }
+  constructor(public loadingController: LoadingController, private route: ActivatedRoute, private navCrtl: NavController) { }
 
   ngOnInit() {
     this.restData.restaurantID = null
@@ -32,6 +32,10 @@ export class GenqrPage implements OnInit {
         // KEINE PARAMETER
       }
     })
+  }
+
+  goBack(){
+    this.navCrtl.pop()
   }
 
   refresh(){
@@ -49,10 +53,21 @@ export class GenqrPage implements OnInit {
     console.log(this.restData.restState)
     console.log(this.table)
     if(this.restData.restaurantID && this.restData.restState && this.table){
-      this.qrData = this.baseUrl + "?gastroID=" + this.restData.restaurantID  + "&table=" + this.table + "&state=" + this.restData.restState
+      this.qrData = this.baseUrl + "?gastroID=" + this.restData.restaurantID  + "&table=" + this.table // + "&state=" + this.restData.restState
     } else {
       console.log("sachen fehlen...")
     }
   }
 
+  downloadQrCode(){
+    const img = document.querySelector('img') as HTMLImageElement
+
+    console.log(img.src)
+
+    var downloadInstance = document.createElement("a"); //Create <a>
+    downloadInstance.href = img.src;                    //Image Base64 Goes here
+    downloadInstance.download = "Image.png";            //File name Here
+    downloadInstance.click();                           //Downloaded file
+    downloadInstance.remove();                          //Removes the Element
+  }
 }

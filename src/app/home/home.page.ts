@@ -9,10 +9,12 @@ import { LoadingController } from '@ionic/angular';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
+
 export class HomePage {
+  currentTitle: string = "GastroCheck"
   currentUserId: string
   informations: any = {}
-  checkOutMode: boolean = true
+  currentMode: number = 0
   mandatoryFields = {
     name: false,
     symtomConfirmation: false,
@@ -25,6 +27,8 @@ export class HomePage {
     deletionTime: 0,
     submitButton: true
   }
+
+  restData: any = {}
 
   functions = firebase.app().functions('europe-west3')
 
@@ -39,29 +43,32 @@ export class HomePage {
   ngOnInit() {
     this.currentUserId          = null
     this.route.queryParams.subscribe((params) => {
-      if(params && params.gastroID && params.table && params.state) {
+      //&& params.state
+      if(params && params.gastroID && params.table ) {
         this.informations.gastroID  = params.gastroID
         this.informations.table     = params.table
-        this.informations.state     = params.state
+        //this.informations.state   = params.state
+        
       } else {
         // KEINE PARAMETER
       }
     })
-    
 
     // Get the value of userId
     this.storage.get("userId").then((val) => {
       // if the value was found
       if(val){
         // se the current user ID to this value
+        this.currentMode = 1
         this.currentUserId = val
         console.log(val)
+        this.refresh()
       } else {
         // no id found
         // setup the formular based on state
-        this.setFieldsBasedOnState()
+        this.refresh()
         // make the forumlar visible
-        this.checkOutMode = false
+        this.currentMode = 2
       }
     })
   }
@@ -76,11 +83,11 @@ export class HomePage {
     const guestCheckOut = this.functions.httpsCallable('guestCheckOut')
     guestCheckOut({ uid: this.currentUserId }).then(() => {
       // set the user to checked out and return him back to the formular
-      this.checkOutMode = false
+      this.currentMode = 2
       // clear the key storage
       this.storage.clear()
       // setup the formular based on state
-      this.setFieldsBasedOnState()
+      this.refresh()
       loading.dismiss()
     }).catch((err) => {
       console.log(err)
@@ -129,7 +136,7 @@ export class HomePage {
       addGuest(this.informations).then(() => {
         this.storage.set("userId", firebase.auth().currentUser.uid).then(() => console.log("saved user"))
         this.currentUserId = firebase.auth().currentUser.uid
-        this.checkOutMode = true
+        this.currentMode = 1
         loading.dismiss()
         firebase.auth().currentUser.delete().catch((err) => {
           console.log(err)
@@ -149,15 +156,14 @@ export class HomePage {
     let navigationExtras: NavigationExtras = {
       queryParams: {
         gastroID: "3wKgzegbBz2b9cVkqLCD",
-        table: 2,
-        state: "NW"
+        table: 2
       }
     };
     this.router.navigate(['home'], navigationExtras)
   }
   
   setFieldsBasedOnState(){
-    switch (this.informations.state) {
+    switch (this.restData.restState) {
       case "BW": // Baden-Württemberg
         this.mandatoryFields.name               = true
         this.mandatoryFields.symtomConfirmation = true
@@ -315,5 +321,17 @@ export class HomePage {
       default:
         break;
     }
+  }
+
+  refresh(){
+    const restaurant = firebase.firestore().collection('restaurants').doc(this.informations.gastroID)
+    restaurant.get().then((data) => {
+      const title = document.getElementById('title') as HTMLElement 
+      title.innerHTML = data.data().restName
+      console.log(data.data().restName)
+      this.restData = data.data()
+
+      this.setFieldsBasedOnState()
+    }).catch((err) => { throw err })
   }
 }
