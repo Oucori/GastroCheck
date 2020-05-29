@@ -80,22 +80,12 @@ export class UsermanagerPage implements OnInit {
   }
 
   async createToast(msg, header){
-    if(header == null) {
-      const toastMSG = await this.toast.create({
-        message: msg,
-        duration: 2000
-      })
+    const toastMSG = await this.toast.create({
+      header: header,
+      message: msg,
+      duration: 2000
+    })
 
-      toastMSG.present();
-      
-    } else {
-      const toastMSG = await this.toast.create({
-        header: header,
-        message: msg,
-        duration: 2000
-      })
-
-      toastMSG.present();
-    }
+    toastMSG.present()
   }
 }
