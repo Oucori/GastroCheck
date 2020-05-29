@@ -143,16 +143,12 @@ export class RestSettingsPage implements OnInit {
       this.createToast("Sie haben nicht die Ausreichenden berechtigungen ein Neues Restaurant hinzuzufügen.", "Fehler beim Restaurant Update.")
       return
     }
-    if(!this.restInfo.restDescription){
-      this.createToast("Bitte fügen sie eine Beschreibung hinzu.", "Fehler beim Restaurant Update.")
-      return
-    }
-    if(!this.restInfo.restaurantID){
-      this.createToast("Bitte loggen sie sich neu ein und versuchen sie es erneut.", "Fehler beim Restaurant Update.")
-      return
-    }
     if(!this.restInfo.restName){
       this.createToast("Bitte tragen sie einen Gültigen Namen ein.", "Fehler beim Restaurant Update.")
+      return
+    }
+    if(!this.restInfo.restDescription){
+      this.createToast("Bitte fügen sie eine Beschreibung hinzu.", "Fehler beim Restaurant Update.")
       return
     }
     if(!this.restInfo.restCellphone) {
