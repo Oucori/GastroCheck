@@ -80,6 +80,7 @@ export class RestDetailsPage implements OnInit {
 
   orderGuests(){
     let guestListTempMap: Array<any> = new Array
+    this.guestListActive = new Array
     this.guestListInActive = new Array
     const guest = firebase.firestore().collection('guests')
     this.restInformations.restActiveGuests.forEach(element => {
@@ -93,7 +94,6 @@ export class RestDetailsPage implements OnInit {
           highestTableNr = Math.max(highestTableNr, guestListTempMap[index].table)
         }
 
-        this.guestListActive = new Array
         let userList
         for (let index = 0; index <= highestTableNr; index++) {
           userList = new Array
