@@ -27,12 +27,12 @@
 }
 
 .content {
-  --ion-background-color:#17e2b6;
+  --ion-background-color:#ffff;
 }
 
 .item{
-  background-color: #17e2b6;
-  --ion-background-color:#17e2b6;
+  background-color: #d3d3d3;
+  --ion-background-color:#d3d3d3;
 }
 
 .submitButton {
@@ -51,8 +51,8 @@
   //max-height: 200%;
   top: 50%;
   transform: translateY(-54%);
-  background-color: #17e2b6;
-  --ion-background-color:#17e2b6;
+  background-color: #d3d3d3;
+  --ion-background-color:#d3d3d3;
 }
 
 .formHeader {

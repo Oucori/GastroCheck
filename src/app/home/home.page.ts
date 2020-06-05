@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as firebase from 'firebase';
 import { Storage } from '@ionic/storage'
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController, IonCheckbox } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -99,6 +99,11 @@ export class HomePage {
 
   // @argument data - firstName, lastName, email, cellphone, city, street, zip, gastroID, tableNr, deletionWeeks 
   async sendFormular(){
+    let checkbox = document.getElementById('checkbox') as HTMLIonCheckboxElement
+    if(!checkbox.checked) {
+      this.createToast("Bitte akzeptieren sie die Datenschutzerklärung.", "Fehler beim formular absenden.")
+      return
+    }
     if(this.mandatoryFields.name && !(this.informations.firstName || this.informations.lastName)) {
       this.createToast("Bitte tragen sie einen Gültigen Namen ein.", "Fehler beim formular absenden.")
       return

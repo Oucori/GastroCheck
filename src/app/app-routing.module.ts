@@ -30,6 +30,10 @@ const routes: Routes = [
   {
     path: 'genqr',
     loadChildren: () => import('./genqr/genqr.module').then( m => m.GenqrPageModule)
+  },
+  {
+    path: 'date-picker',
+    loadChildren: () => import('./modal/date-picker/date-picker.module').then( m => m.DatePickerPageModule)
   }
 ];
 

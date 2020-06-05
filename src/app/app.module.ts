@@ -14,6 +14,7 @@ import { environment } from '../environments/environment';
 import { IonicStorageModule } from '@ionic/storage';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyCg5hs9tldOK9HY2vgaBtJtJzEEPgzs9FE",

@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
 import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { DatePickerPage } from '../modal/date-picker/date-picker.page';
 
 @Component({
   selector: 'app-rest-details',
   templateUrl: './rest-details.page.html',
   styleUrls: ['./rest-details.page.scss'],
 })
+
 export class RestDetailsPage implements OnInit {
   functions = firebase.app().functions('europe-west3')
   restInformations: any = {}
@@ -24,6 +26,8 @@ export class RestDetailsPage implements OnInit {
       this.refresh()
       this.loggedIn = true
     }
+
+    
   }
 
   employeeLogin(){
@@ -103,13 +107,10 @@ export class RestDetailsPage implements OnInit {
           }
         }
         
+        console.log("Active:")
+        console.log(this.guestListActive)
       })
     });
-
-    
-
-
-
 
     this.restInformations.restInActiveGuests.forEach(element => {
       guest.doc(element).get().then((data) => {
@@ -166,9 +167,26 @@ export class RestDetailsPage implements OnInit {
     const toastMSG = await this.toast.create({
       header: header,
       message: msg,
-      duration: 2000
+      duration: 4000
     })
 
     toastMSG.present()
+  }
+
+  async createReport(){
+    const allUserData: Array<any> = []
+    allUserData.push(this.guestListActive)
+    allUserData.push(this.guestListInActive)
+    const modal = await this.modalController.create({
+      component: DatePickerPage,
+      componentProps: {
+        userData: allUserData,
+        restData: this.restInformations
+      }
+    })
+
+    modal.present()
+
+    //this.generateReport(new Date('05/23/2020 00:00'), new Date())
   }
 }

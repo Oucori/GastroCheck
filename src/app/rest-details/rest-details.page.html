@@ -7,6 +7,7 @@
 <ion-header *ngIf="loggedIn">
   <ion-toolbar color="primary">
     <ion-button slot="start" (click)="employeeLogout()"><ion-icon name="log-out"></ion-icon></ion-button>
+    <ion-button slot="start" (click)="createReport()"><ion-icon name="document-text-outline"></ion-icon></ion-button>
     <ion-title>{{restInformations.restName}}</ion-title>
     <ion-button slot="end" (click)="restQrGen()"><ion-icon name="qr-code"></ion-icon></ion-button>
     <ion-button *ngIf="restAdmin" slot="end" (click)="restSettings()"><ion-icon name="settings"></ion-icon></ion-button>

@@ -29,6 +29,7 @@
     "cordova-sqlite-storage": "^5.0.0",
     "firebase": "^7.14.4",
     "ngx-qrcode2": "^9.0.0",
+    "pdfmake": "^0.1.65",
     "rxjs": "~6.5.1",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

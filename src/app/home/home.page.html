@@ -6,7 +6,7 @@
   </ion-toolbar>
 </ion-header-->
 
-<ion-content style="--ion-background-color:#17e2b6;" class="content" class="contentBox" [fullscreen]="true" *ngIf="currentMode == 2">
+<ion-content style="--ion-background-color:#ffffff;" class="content" class="contentBox" [fullscreen]="true" *ngIf="currentMode == 2">
   <ion-card class="formCard">
     <ion-img class="restLogo" *ngIf="this.restData.restLogo" [src]="this.restData.restLogo"></ion-img>
     <ion-label class="formHeader" id="title">
@@ -41,12 +41,17 @@
         <ion-select-option value=false>Nein</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label style="font-size: 1em;">Ich bin mit den Terms of Use <br/> und den Datenschutzerklärung <br/> einverstanden</ion-label>
+      <ion-checkbox id="checkbox"></ion-checkbox>
+    </ion-item>
     <ion-button class="submitButton" expand="full" (click)="sendFormular()">Submit</ion-button>
+
   </ion-card>
   
 </ion-content>
 
-<ion-content [fullscreen]="true" style="--ion-background-color:#17e2b6;" *ngIf="currentMode == 1">
+<ion-content [fullscreen]="true" style="--ion-background-color:#ffffff;" *ngIf="currentMode == 1">
   <ion-card class="formCard">
     <ion-img class="restLogo" *ngIf="this.restData.restLogo" [src]="this.restData.restLogo"></ion-img>
     <ion-label class="formHeader" id="title">
