@@ -26,8 +26,15 @@ export class AdminPage implements OnInit {
   adminLogin(){
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
       firebase.auth().signInWithEmailAndPassword(this.login.email, this.login.password).then((usr) => {
-        this.loggedIn = true;
-        this.fetchRestaurants();
+        const sys = firebase.firestore().collection('system').doc('permissionManagement')
+        sys.get().then((data) => {
+          this.loggedIn = true;
+          this.fetchRestaurants();
+        }).catch((err) => {
+          this.loggedIn = false;
+        })
+        
+        
       })
     })
   }

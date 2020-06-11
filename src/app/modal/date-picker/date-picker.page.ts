@@ -120,13 +120,16 @@ export class DatePickerPage implements OnInit {
   }
 
   async openReport(){
-    await this.generateReport()
-    this.pdfObj.open()
+    await this.generateReport().then(() => {
+      this.pdfObj.open()
+    })
+    
   }
 
   async downloadReport(){
-    await this.generateReport()
-    this.pdfObj.download()  
+    await this.generateReport().then(() => {
+      this.pdfObj.download()  
+    })
   }
 
   getBase64fromImageURL(url) {

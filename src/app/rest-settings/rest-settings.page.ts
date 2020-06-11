@@ -29,23 +29,24 @@ export class RestSettingsPage implements OnInit {
   ngOnInit() {
     const sys = firebase.firestore().collection('system').doc('permissionManagement')
     sys.get().then((data) => {
-      if(data.data().admins.includes(firebase.auth().currentUser.uid)){
-        this.isCompanyAdmin = true
-      }
-      this.route.params.subscribe((params) => {
-        if(params.gastroID) {
-          if(!(params.gastroID == "newRest")){
-            this.restInfo.restaurantID  = params.gastroID
-            this.newRest = false
-            // fill current rest data into the form
-            this.fetchRestInformations()
-          } else {
-            this.newRest = true
-          }
+      this.isCompanyAdmin = true
+    }).catch((err) => {
+      this.isCompanyAdmin = false
+    })
+
+    this.route.params.subscribe((params) => {
+      if(params.gastroID) {
+        if(!(params.gastroID == "newRest")){
+          this.restInfo.restaurantID  = params.gastroID
+          this.newRest = false
+          // fill current rest data into the form
+          this.fetchRestInformations()
         } else {
-          // KEINE PARAMETER
+          this.newRest = true
         }
-      })
+      } else {
+        // KEINE PARAMETER
+      }
     })
   }
 

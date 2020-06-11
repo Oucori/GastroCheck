@@ -48,23 +48,32 @@ export class RestDetailsPage implements OnInit {
   }
 
   fetchRestaurantData(){
-    const restaurant = firebase.firestore().collection('restaurants');
-    restaurant.doc(this.restInformations.restaurantID).get().then((data) => {
-      const restData = data.data()
-      this.restInformations.restName            = restData.restName
-      this.restInformations.restDescription     = restData.restDescription
-      this.restInformations.restCellphone       = restData.restCellphone
-      this.restInformations.restState           = restData.restState
-      this.restInformations.restTables          = restData.restTables
-      this.restInformations.restActiveGuests    = restData.restActiveGuests
-      this.restInformations.restInActiveGuests  = restData.restInActiveGuests
-      this.restInformations.restAdmins          = restData.restAdmins
-      this.restInformations.restEmployees       = restData.restEmployees
-      if(restData.restAdmins.includes(firebase.auth().currentUser.uid)){
-        this.restAdmin = true
-      }
+    return new Promise((res, rej) => {
+      const restaurants = firebase.firestore().collection('restaurants');
+      const restaurantsPrivate = firebase.firestore().collection('restaurantsPrivate')
 
-      this.orderGuests()
+      restaurants.doc(this.restInformations.restaurantID).get().then((data) => {
+        this.restInformations.restName            = data.data().restName
+        this.restInformations.restDescription     = data.data().restDescription
+        this.restInformations.restCellphone       = data.data().restCellphone
+        this.restInformations.restState           = data.data().restState
+        this.restInformations.restTables          = data.data().restTables
+        
+        restaurantsPrivate.doc(this.restInformations.restaurantID).get().then((data) => {
+          this.restInformations.restActiveGuests    = data.data().restActiveGuests
+          this.restInformations.restInActiveGuests  = data.data().restInActiveGuests
+          this.restInformations.restAdmins          = data.data().restAdmins
+          this.restInformations.restEmployees       = data.data().restEmployees
+          if(data.data().restAdmins.includes(firebase.auth().currentUser.uid)){
+            this.restAdmin = true
+          }
+          res(data.data())
+        }).catch((err) => {
+          rej(err)
+        })
+      }).catch((err) => {
+        rej(err)
+      })
     })
   }
 
@@ -73,7 +82,9 @@ export class RestDetailsPage implements OnInit {
     if(firebase.auth().currentUser) {
       user.get().then((data) => {
         this.restInformations.restaurantID = data.data().restaurantID
-        this.fetchRestaurantData()
+        this.fetchRestaurantData().then(() =>{
+          this.orderGuests()
+        })
       })
     }
   }
